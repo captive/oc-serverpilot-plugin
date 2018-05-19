@@ -29,14 +29,6 @@ class Settings extends Model
     protected $fillable = [];
 
 
-    use \October\Rain\Database\Traits\Validation;
-
-    public $rules = [
-        #API ServerPilot
-        'CLIENT_ID'    => 'required',
-        'API_KEY'   => 'required'
-    ];
-
     public function afterSave()
     {
         # refresh data.

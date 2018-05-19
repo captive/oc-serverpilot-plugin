@@ -38,6 +38,12 @@ navigation:
                 icon: icon-server
                 permissions:
                     - awebsome.serverpilot.servers
+            accounts:
+                label: Accounts
+                url: awebsome/serverpilot/accounts
+                icon: icon-key
+                permissions:
+                    - awebsome.serverpilot.accounts
 permissions:
     awebsome.serverpilot.serverpilot:
         tab: 'awebsome.serverpilot::lang.plugin.name'

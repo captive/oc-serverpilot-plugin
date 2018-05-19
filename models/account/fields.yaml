@@ -1,0 +1,26 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    email:
+        label: Email
+        span: left
+tabs:
+    fields:
+        client_id:
+            tab: Token
+            label: Client ID
+            type: text
+            required: true
+            span: left
+            commentHtml: true
+            comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'
+        api_key:
+            tab: Token
+            label: Api Key
+            type: text
+            required: true
+            span: right
+            commentHtml: true
+            comment: 'Obtain this from <a href="https://manage.serverpilot.io/#account/api" target="_blank">here</a>.'

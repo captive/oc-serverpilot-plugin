@@ -1,0 +1,13 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    email:
+        label: Email
+    client_id:
+        label: ClientID
+    is_auth:
+        label: Auth
+        type: partial
+        path: ~/plugins/awebsome/serverpilot/models/account/columns/auth.htm

@@ -1,34 +1,36 @@
-<?php namespace Awebsome\Serverpilot\Classes\Api;
+<?php namespace Awebsome\Serverpilot\Classes;
 
 use Log;
 use ValidationException;
 use Awebsome\Serverpilot\Classes\ServerPilot;
-use Awebsome\Serverpilot\Models\Settings as CFG;
+use Awebsome\Serverpilot\Models\Settings as Conf;
 
-class Curl
+class Api
 {
+    public $client_id;
+    public $api_key;
 
 	/**
 	 * core request function
-	 *
+	 * ===================================================================
 	 * used as the main communication layer between API and local code
 	 *
 	 * @param string $method defines the method for the request
-	 *
 	 * @return void
 	 */
-
-    public function credentials()
+    public static function auth($client_id, $api_key)
     {
-        $CLIENT_ID  = CFG::get('CLIENT_ID');
-        $API_KEY    = CFG::get('API_KEY');
+        $self = new Self;
 
-        return $CLIENT_ID.':'.$API_KEY;
+        $self->client_id    = current($client_id);
+        $self->api_key      = end($api_key);
+
+        return $self;
     }
 
 	public function request($resource=null, $data=null, $method=ServerPilot::SP_HTTP_METHOD_GET) {
 
-        $auth = $this->credentials();
+        $auth = $this->client_id.':'.$this->api_key;
 
 		$url = ServerPilot::SP_API_ENDPOINT .'/'. $resource;
 
@@ -117,7 +119,7 @@ class Curl
         {
             if($method == ServerPilot::SP_HTTP_METHOD_POST || $method == ServerPilot::SP_HTTP_METHOD_DELETE)
             {
-                if(CFG::get('log_errors'))
+                if(Conf::get('log_errors'))
                 Log::error($error);
 
                 throw new ValidationException(['error_mesage' => $error]);

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Account
+
+# Model Form Field configuration
+form: $/awebsome/serverpilot/models/account/fields.yaml
+
+# Model Class name
+modelClass: Awebsome\Serverpilot\Models\Account
+
+# Default redirect location
+defaultRedirect: awebsome/serverpilot/accounts
+
+# Create page
+create:
+    title: Create Account
+    redirect: awebsome/serverpilot/accounts/update/:id
+    redirectClose: awebsome/serverpilot/accounts
+
+# Update page
+update:
+    title: Edit Account
+    redirect: awebsome/serverpilot/accounts
+    redirectClose: awebsome/serverpilot/accounts
+
+# Preview page
+preview:
+    title: Preview Account

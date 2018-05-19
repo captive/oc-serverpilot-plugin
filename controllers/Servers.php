@@ -4,6 +4,8 @@ use Backend;
 use BackendMenu;
 
 use Backend\Classes\Controller;
+
+use Awebsome\Serverpilot\Models\Account;
 use Awebsome\Serverpilot\Classes\ServerPilot;
 
 /**

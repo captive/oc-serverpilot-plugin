@@ -2,11 +2,9 @@
 
 use Event;
 
-use Awebsome\ServerPilot\Models\Settings as CFG;
-use Awebsome\Serverpilot\Classes\Api\Curl;
-use Awebsome\Serverpilot\Classes\ImportHandler as Import;
+use Awebsome\Serverpilot\Classes\Api;
 
-class ServerPilot extends Curl
+class ServerPilot extends Api
 {
     // constants
     const SP_CACHE              = 3600;
@@ -18,22 +16,26 @@ class ServerPilot extends Curl
     const SP_HTTP_METHOD_DELETE    = 'DELETE';
 
 
-    /**  Location for overloaded data.  */
-    public $data;               # data for create, update, or delete.
-    public $endpoint;           # resource to /endpoint
-    public $ssl;                # add ssl to endpoint
-    public $name;               # $resource name. ex: apps, servers, dbs
+    /**  Location for overloaded data. **/
+    public $data;            # data for create, update, or delete.
+    public $endpoint;        # resource to /endpoint
+    public $ssl;             # add ssl to endpoint
+    public $name;            # $resource name. ex: apps, servers, dbs
 
     public $model;           # Models of resources.
     public $table;           # Models of resources.
     public $id;              # Model of resource.
 
-    public static function instance()
+    public static function auth($client_id, $api_key)
     {
         $self = new Self;
-        
+
+        $self->client_id = $client_id;
+        $self->api_key   = $api_key;
+
         return $self;
     }
+
     /**
      * Register Models.
      */
@@ -125,21 +127,16 @@ class ServerPilot extends Curl
      * check authentication
      * @return boolean is auth
      */
-    public static function isAuth()
+    public function isAuth()
     {
-        if(CFG::get('CLIENT_ID') && CFG::get('API_KEY'))
-        {
+        $servers = $this->servers()->get();
+        $error = @$servers->error->code;
 
-            $sp = new Self;
-            $response = $sp->actions('1')->get();
-            $code = @$response->error->code;
-
-            if($code != 401)
-                return true;
-            else return false;
-
-        }else return false;
+        if($error == 401)
+            return false;
+        return true;
     }
+
 
     /**
      * Servers
@@ -148,59 +145,55 @@ class ServerPilot extends Curl
      * @param $id to retrive one.
      * @return array data endpoint resource id
     */
-    public static function servers($id = null)
+    public function servers($id = null)
     {
-        $sp = new Self;
-        $sp->name = __FUNCTION__;
-        $sp->model = $sp->getModel($sp->name);
-        $sp->table = $sp->getTable($sp->name);
-        $sp->id = $id;
+        $this->name = __FUNCTION__;
+        $this->model = $this->getModel($this->name);
+        $this->table = $this->getTable($this->name);
+        $this->id = $id;
 
-        return $sp;
+        return $this;
     }
 
-    public static function apps($id = null)
+    public function apps($id = null)
     {
-        $sp = new Self;
-        $sp->name = __FUNCTION__;
-        $sp->model = $sp->getModel($sp->name);
-        $sp->table = $sp->getTable($sp->name);
-        $sp->id = $id;
+        $this->name = __FUNCTION__;
+        $this->model = $this->getModel($this->name);
+        $this->table = $this->getTable($this->name);
+        $this->id = $id;
 
-        return $sp;
+        return $this;
     }
 
-    public static function sysusers($id = null)
+    public function sysusers($id = null)
     {
-        $sp = new Self;
-        $sp->name = __FUNCTION__;
-        $sp->model = $sp->getModel($sp->name);
-        $sp->table = $sp->getTable($sp->name);
-        $sp->id = $id;
+        $this->name = __FUNCTION__;
+        $this->model = $this->getModel($this->name);
+        $this->table = $this->getTable($this->name);
+        $this->id = $id;
 
-        return $sp;
+        return $this;
     }
 
-    public static function dbs($id = null)
+    public function dbs($id = null)
     {
-        $sp = new Self;
-        $sp->name = __FUNCTION__;
-        $sp->model = $sp->getModel($sp->name);
-        $sp->table = $sp->getTable($sp->name);
-        $sp->id = $id;
 
-        return $sp;
+        $this->name = __FUNCTION__;
+        $this->model = $this->getModel($this->name);
+        $this->table = $this->getTable($this->name);
+        $this->id = $id;
+
+        return $this;
     }
 
-    public static function actions($id)
+    public function actions($id)
     {
-        $sp = new Self;
-        $sp->name = __FUNCTION__;
-        $sp->model = $sp->getModel($sp->name);
-        $sp->table = $sp->getTable($sp->name);
-        $sp->id = $id;
+        $this->name = __FUNCTION__;
+        $this->model = $this->getModel($this->name);
+        $this->table = $this->getTable($this->name);
+        $this->id = $id;
 
-        return $sp;
+        return $this;
     }
 
 
@@ -210,7 +203,6 @@ class ServerPilot extends Curl
 
     public function import($mode = null)
     {
-
         if(!$mode)
         {
             if(!$this->id)
@@ -297,7 +289,7 @@ class ServerPilot extends Curl
 
     // Plus conditions & restrinctions.
 
-    public static function plus()
+    /*public function plus()
     {
 
         // Extend all backend form usage
@@ -316,5 +308,5 @@ class ServerPilot extends Curl
             if(!class_exists('Awebsome\Serverpilotplus\Classes\BackupHandler'))
                 $widget->removeField('backups');
         });
-    }
+    }*/
 }

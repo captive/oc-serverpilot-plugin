@@ -17,22 +17,13 @@ class Plugin extends PluginBase
     /**
      * @var array Plugin dependencies
      */
-    public $require = [];
+    public $require = [
+        'October.Drivers'
+    ];
 
     public function boot()
     {
-        Event::listen('awebsome.serverpilot.afterSaveSettings', function() {
-            // Code to register $user->email to mailing list
-            if(ServerPilot::isAuth())
-            {
-                ServerPilot::servers()->import();
-                ServerPilot::sysusers()->import();
-                ServerPilot::apps()->import('oneToOne');
-                ServerPilot::dbs()->import();
-            }
-        });
 
-        ServerPilot::plus();
     }
 
     public function registerSchedule($schedule)
