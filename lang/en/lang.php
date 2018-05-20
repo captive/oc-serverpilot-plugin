@@ -7,7 +7,7 @@
     'message' => [
 
         'authentication_fails'  => 'ServerPilot: Authentication failed',
-        'authentication_fails_help'  => 'Please check <a href="'.Backend::url('system/settings/update/awebsome/serverpilot/serverpilot').'">your credentials</a>, if the problem persists try contacting <a target="_blank" href="https://serverpilot.io">ServerPilot</a>.',
+        'authentication_fails_help'  => 'Please check <a href="'.Backend::url('/awebsome/serverpilot/accounts').'">your credentials</a>, if the problem persists try contacting <a target="_blank" href="https://serverpilot.io">ServerPilot</a>.',
     ],
     'error' => [
         '400' => 'Error 400: ServerPilot says, We could not understand your request. Typically missing a parameter or header. :data',

@@ -10,6 +10,11 @@ class CreateAccountsTable extends Migration
 {
     public function up()
     {
+        Schema::table('awebsome_serverpilot_servers', function($table)
+        {
+            $table->integer('account_id')->unsigned()->change();
+        });
+
         Schema::create('awebsome_serverpilot_accounts', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');

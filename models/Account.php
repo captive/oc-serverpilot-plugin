@@ -30,7 +30,7 @@ class Account extends Model
      */
     protected $rules = [
         'email' => 'required|email',
-        'client_id' => 'required',
+        'client_id' => 'required|unique:awebsome_serverpilot_accounts',
         'api_key' => 'required',
     ];
 
@@ -51,6 +51,12 @@ class Account extends Model
     {
         return ServerPilot::auth($this->client_id, $this->api_key);
     }
+
+    public function getApiServers()
+    {
+        return $this->api()->servers()->get();
+    }
+
     public function getIsAuthAttribute()
     {
         return $this->api()->isAuth();

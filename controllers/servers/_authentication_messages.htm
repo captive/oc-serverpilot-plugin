@@ -1,10 +1,15 @@
-<? if(!Awebsome\Serverpilot\Classes\ServerPilot::isAuth()): ?>
+<? if($fails = Awebsome\Serverpilot\Classes\ServerPilot::authFailures()): ?>
 <div class="padded-container">
     <div class="callout callout-danger">
         <div class="header">
             <i class="icon-exclamation-triangle"></i>
             <h3><?= trans('awebsome.serverpilot::lang.message.authentication_fails') ?></h3>
             <p><?= trans('awebsome.serverpilot::lang.message.authentication_fails_help') ?> </p>
+            <ul>
+                <? foreach($fails as $fail): ?>
+                    <li><?= $fail ?></li>
+                <? endforeach; ?>
+            </ul>
         </div>
     </div>
 </div>
