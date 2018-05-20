@@ -3,6 +3,10 @@
 # ===================================
 
 fields:
+    account[email]:
+        label: Owner
+        disabled: true
+        span: left
     name:
         label: Name
         disabled: true

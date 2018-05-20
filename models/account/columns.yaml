@@ -11,3 +11,6 @@ columns:
         label: Auth
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/account/columns/auth.htm
+    updated_at:
+        label: 'Last Pull'
+        type: timesince

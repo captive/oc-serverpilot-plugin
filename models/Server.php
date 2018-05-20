@@ -26,7 +26,12 @@ class Server extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['*'];
+    protected $fillable = [];
+
+    /**
+     * @var array Jsonable fields
+     */
+    protected $jsonable = ['available_runtimes'];
 
     /**
      * @var array Relations
@@ -37,7 +42,9 @@ class Server extends Model
         'databases'     => ['Awebsome\Serverpilot\Models\Database','key' => 'server_api_id','otherKey' => 'api_id'],
         'apps'          => ['Awebsome\Serverpilot\Models\App','key' => 'server_api_id','otherKey' => 'api_id']
     ];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'account' => 'Awebsome\ServerPilot\Models\Account'
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
@@ -45,22 +52,4 @@ class Server extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    /**
-     * check if it's an import
-     * @param boolean
-     */
-    public $importing;
-
-    public function beforeUpdate()
-    {
-        if(!$this->importing)
-        {
-            ServerPilot::servers($this->api_id)->update([
-                'autoupdates'   => ($this->autoupdates) ? TRUE : FALSE,
-                'firewall'      => ($this->firewall) ? TRUE : FALSE,
-                'deny_unknown_domains'   => ($this->deny_unknown_domains) ? TRUE : FALSE,
-            ]);
-            //Log::info('server Updateado...');
-        }
-    }
 }

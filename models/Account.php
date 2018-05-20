@@ -1,7 +1,7 @@
 <?php namespace Awebsome\ServerPilot\Models;
 
 use Model;
-use Awebsome\ServerPilot\Classes\ServerPilot;
+use ValidationException;
 
 /**
  * Account Model
@@ -38,7 +38,9 @@ class Account extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+        'servers' => ['Awebsome\ServerPilot\Models\Server']
+    ];
     public $belongsTo = [];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -47,18 +49,17 @@ class Account extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    public function api()
+    use \Awebsome\ServerPilot\Traits\Accounts;
+
+    public function beforeSave()
     {
-        return ServerPilot::auth($this->client_id, $this->api_key);
+        if(!$this->is_auth)
+            throw new ValidationException(['error_mesage' => trans('awebsome.serverpilot::lang.error.401')]);
     }
 
-    public function getApiServers()
+    public function afterSave()
     {
-        return $this->api()->servers()->get();
-    }
-
-    public function getIsAuthAttribute()
-    {
-        return $this->api()->isAuth();
+        // Import Batch
+        $this->import();
     }
 }

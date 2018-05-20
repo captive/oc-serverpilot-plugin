@@ -3,6 +3,8 @@
 use BackendMenu;
 use Backend\Classes\Controller;
 
+use Awebsome\Serverpilot\Models\Account;
+
 /**
  * Accounts Back-end Controller
  */
@@ -17,11 +19,16 @@ class Accounts extends Controller
     public $listConfig = 'config_list.yaml';
 
     public $requiredPermissions = ['awebsome.serverpilot.accounts'];
-    
+
     public function __construct()
     {
         parent::__construct();
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'accounts');
+    }
+
+    public function test()
+    {
+        
     }
 }

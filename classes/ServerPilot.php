@@ -2,7 +2,8 @@
 
 use Event;
 
-use Awebsome\Serverpilot\Classes\Api;
+use Awebsome\ServerPilot\Classes\Api;
+use Awebsome\ServerPilot\Models\Account;
 
 class ServerPilot extends Api
 {
@@ -37,17 +38,25 @@ class ServerPilot extends Api
     }
 
     /**
-     * Register Models.
+     * authFailures
+     * =====================================
+     * Comprobar los tokens de Accounts
+     * @return boolean true si hay fallos de autenticación
      */
-    public function registerModels()
+    public static function authFailures()
     {
-        return [
-            'servers'   => 'Awebsome\ServerPilot\Models\Server',
-            'sysusers'  => 'Awebsome\ServerPilot\Models\Sysuser',
-            'apps'      => 'Awebsome\ServerPilot\Models\App',
-            'dbs'       => 'Awebsome\ServerPilot\Models\Database',
-            'actions'   => 'Awebsome\ServerPilot\Models\Action',
-        ];
+        $accounts = Account::all();
+        if(count($accounts) >= 1)
+        {
+            $fails = [];
+            foreach ($accounts as $account)
+            {
+                if(!$account->is_auth)
+                    $fails[] = ($account->email) ? $account->email : $account->client_id;
+            }
+
+            return $fails;
+        }
     }
 
     /**
@@ -60,15 +69,7 @@ class ServerPilot extends Api
         return [
             'servers' => [
                 # 'table_col'           => [api_key, mutatorMethod]
-                'api_id'                => ['id'],
-                'name'                  => ['name'],
-                'autoupdates'           => ['autoupdates'],
-                'firewall'              => ['firewall'],
-                'lastaddress'           => ['lastaddress'],
-                'datecreated'           => ['datecreated'],
-                'lastconn'              => ['lastconn'],
-                'created_at'            => ['datecreated'],
-                'deny_unknown_domains'  => ['deny_unknown_domains']
+
             ],
             'sysusers' => [
                 'api_id'                => ['id'],
@@ -109,18 +110,6 @@ class ServerPilot extends Api
         ];
     }
 
-    public function getModel($resource)
-    {
-        $models = $this->registerModels();
-        return $models[$resource];
-    }
-
-    public function getTable($resource)
-    {
-        $tables = $this->registerTables();
-        return $tables[$resource];
-    }
-
     /**
      * isAuth
      * ==============================
@@ -137,7 +126,6 @@ class ServerPilot extends Api
         return true;
     }
 
-
     /**
      * Servers
      * ==============================
@@ -148,8 +136,6 @@ class ServerPilot extends Api
     public function servers($id = null)
     {
         $this->name = __FUNCTION__;
-        $this->model = $this->getModel($this->name);
-        $this->table = $this->getTable($this->name);
         $this->id = $id;
 
         return $this;
@@ -158,8 +144,6 @@ class ServerPilot extends Api
     public function apps($id = null)
     {
         $this->name = __FUNCTION__;
-        $this->model = $this->getModel($this->name);
-        $this->table = $this->getTable($this->name);
         $this->id = $id;
 
         return $this;
@@ -168,8 +152,6 @@ class ServerPilot extends Api
     public function sysusers($id = null)
     {
         $this->name = __FUNCTION__;
-        $this->model = $this->getModel($this->name);
-        $this->table = $this->getTable($this->name);
         $this->id = $id;
 
         return $this;
@@ -179,8 +161,6 @@ class ServerPilot extends Api
     {
 
         $this->name = __FUNCTION__;
-        $this->model = $this->getModel($this->name);
-        $this->table = $this->getTable($this->name);
         $this->id = $id;
 
         return $this;
@@ -189,46 +169,11 @@ class ServerPilot extends Api
     public function actions($id)
     {
         $this->name = __FUNCTION__;
-        $this->model = $this->getModel($this->name);
-        $this->table = $this->getTable($this->name);
         $this->id = $id;
 
         return $this;
     }
 
-
-    /**
-     * Helper Methods
-     */
-
-    public function import($mode = null)
-    {
-        if(!$mode)
-        {
-            if(!$this->id)
-                $import = Import::all($this);
-            else
-                $import = Import::import($this, $this->get()->data);
-        }else if($mode == 'oneToOne')
-        {
-            $import = Import::allOneToOne($this);
-        }
-
-        return $import;
-    }
-
-    public function importBatch()
-    {
-        if(!$this->id)
-        {
-            $import = Import::batch($this);
-            return $import;
-        }
-    }
-
-    /**
-     * CRUD METHODS
-     */
 
     /**
      * get resource
@@ -286,6 +231,7 @@ class ServerPilot extends Api
 
         $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
     }
+
 
     // Plus conditions & restrinctions.
 

@@ -49,3 +49,6 @@
 1.3.6:
     - 'Multi-Account Table'
     - create_accounts_table.php
+1.3.7:
+    - 'Update Runtimes'
+    - update_servers_table1.php

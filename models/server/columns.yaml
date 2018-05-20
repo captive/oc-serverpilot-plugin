@@ -6,8 +6,7 @@ columns:
         label: api_id
         invisible: true
     account_id:
-        label: account_id
-        invisible: true
+        label: Owner
     name:
         label: Name
         type: partial
@@ -34,18 +33,21 @@ columns:
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/server/columns/users.htm
         sortable: false
+        invisible: true
     apps:
         label: Apps
         relation: apps
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/server/columns/apps.htm
         sortable: false
+        invisible: true
     databases:
         label: Databases
         relation: databases
         type: partial
         path: ~/plugins/awebsome/serverpilot/models/server/columns/databases.htm
         sortable: false
+        invisible: true
     datecreated:
         label: 'Created At'
         type: datetime
