@@ -4,10 +4,6 @@ use Log;
 use Crypt;
 use Model;
 
-use Awebsome\ServerPilot\Models\Server;
-use Awebsome\ServerPilot\Models\Settings as CFG;
-
-use Awebsome\ServerPilot\Classes\ServerPilot;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 /**
@@ -48,42 +44,6 @@ class Sysuser extends Model
     protected $rules = [
         'user'=> 'alpha_num|between: 3, 32',
     ];
-
-    /**
-     * check if it's an import
-     * @param boolean
-     */
-    public $importing;
-
-    public function beforeCreate()
-    {
-        if(!$this->importing)
-        {
-            $sysuser = ServerPilot::sysusers()->create([
-                'serverid' => post('Sysuser.server_api_id'),
-                'name' => $this->name,
-                'password' => post('Sysuser.password')
-            ]);
-
-            if($sysuser = @$sysuser->data)
-            {
-                $this->api_id = $sysuser->id;
-                $this->server_api_id = $sysuser->serverid;
-                # Log::info('creado...'. json_encode($sysuser));
-            }
-        }
-    }
-
-    public function beforeUpdate()
-    {
-        if(!$this->importing && post('Sysuser.password'))
-        {
-            ServerPilot::sysusers($this->api_id)->update([
-                'password' => $this->passwordDecrypt()
-            ]);
-            # Log::info('sysuser Updateado...');
-        }
-    }
 
     /**
      * Set USER.
@@ -127,7 +87,7 @@ class Sysuser extends Model
     {
         return $this->passwordDecrypt();
     }
-    
+
     public function passwordDecrypt()
     {
         # to decrypt use:

@@ -40,40 +40,31 @@ trait Accounts
         {
             foreach($servers as $server)
             {
-                $this->apiPull([
-                    'account_id'            => $this->id,
-                    'api_id'                => $server->id,
-                    'name'                  => $server->name,
-                    'autoupdates'           => $server->autoupdates,
-                    'firewall'              => $server->firewall,
-                    'lastaddress'           => $server->lastaddress,
-                    'datecreated'           => $server->datecreated,
-                    'lastconn'              => $server->lastconn,
-                    'created_at'            => $server->datecreated,
-                    'deny_unknown_domains'  => $server->deny_unknown_domains,
-                    'available_runtimes'    => json_encode($server->available_runtimes)
-                ]);
+                $this->apiPull('awebsome_serverpilot_servers', Server::parseData($this, $server));
             }
         }
     }
+
 
     /**
      * importUpdate()
      * ===========================================
      * @param array $server data.
      */
-    public function apiPull($server)
+    public function apiPull($table, $resource)
     {
-        $exists = Server::where('api_id', $server['api_id'])->first();
+        $exists = Db::table($table)
+            ->where('api_id', $resource['api_id'])
+            ->first();
 
         if($exists)
         {
-            Db::table('awebsome_serverpilot_servers')
-            ->where('api_id', $server['api_id'])
-            ->update($server);
+            Db::table($table)
+            ->where('api_id', $resource['api_id'])
+            ->update($resource);
         }else {
-            Db::table('awebsome_serverpilot_servers')
-            ->insert($server);
+            Db::table($table)
+            ->insert($resource);
         }
     }
 }
