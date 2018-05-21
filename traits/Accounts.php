@@ -1,5 +1,6 @@
 <?php namespace Awebsome\ServerPilot\Traits;
 
+use Db;
 use Awebsome\ServerPilot\Classes\ServerPilot;
 use Awebsome\ServerPilot\Models\Server;
 
@@ -8,21 +9,6 @@ use Awebsome\ServerPilot\Models\Server;
  */
 trait Accounts
 {
-    public $api_data;
-
-    /*
-    'api_id'                => ['id'],
-    'name'                  => ['name'],
-    'autoupdates'           => ['autoupdates'],
-    'firewall'              => ['firewall'],
-    'lastaddress'           => ['lastaddress'],
-    'datecreated'           => ['datecreated'],
-    'lastconn'              => ['lastconn'],
-    'created_at'            => ['datecreated'],
-    'deny_unknown_domains'  => ['deny_unknown_domains'],
-    'available_runtimes'    => ['available_runtimes']
-    */
-
 
     /**
      * API Auth
@@ -50,28 +36,44 @@ trait Accounts
         // Import all Servers of this account.
         $servers = $this->api()->servers()->get()->data;
 
-        foreach($servers as $server)
+        if($servers)
         {
-            $srv = Server::where('api_id', $server->id)->first();
-
-            if(!$srv)
-                $srv = new Server;
-            else $srv = Server::find($srv->id);
-
-            $srv->account_id            = $this->id;
-            $srv->api_id                = $server->id;
-            $srv->name                  = $server->name;
-            $srv->autoupdates           = $server->autoupdates;
-            $srv->firewall              = $server->firewall;
-            $srv->lastaddress           = $server->lastaddress;
-            $srv->datecreated           = $server->datecreated;
-            $srv->lastconn              = $server->lastconn;
-            $srv->created_at            = $server->datecreated;
-            $srv->deny_unknown_domains  = $server->deny_unknown_domains;
-            $srv->available_runtimes    = $server->available_runtimes;
-            $srv->save();
+            foreach($servers as $server)
+            {
+                $this->apiPull([
+                    'account_id'            => $this->id,
+                    'api_id'                => $server->id,
+                    'name'                  => $server->name,
+                    'autoupdates'           => $server->autoupdates,
+                    'firewall'              => $server->firewall,
+                    'lastaddress'           => $server->lastaddress,
+                    'datecreated'           => $server->datecreated,
+                    'lastconn'              => $server->lastconn,
+                    'created_at'            => $server->datecreated,
+                    'deny_unknown_domains'  => $server->deny_unknown_domains,
+                    'available_runtimes'    => json_encode($server->available_runtimes)
+                ]);
+            }
         }
+    }
 
-        return $servers;
+    /**
+     * importUpdate()
+     * ===========================================
+     * @param array $server data.
+     */
+    public function apiPull($server)
+    {
+        $exists = Server::where('api_id', $server['api_id'])->first();
+
+        if($exists)
+        {
+            Db::table('awebsome_serverpilot_servers')
+            ->where('api_id', $server['api_id'])
+            ->update($server);
+        }else {
+            Db::table('awebsome_serverpilot_servers')
+            ->insert($server);
+        }
     }
 }

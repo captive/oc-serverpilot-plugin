@@ -5,7 +5,7 @@ columns:
     api_id:
         label: api_id
         invisible: true
-    account_id:
+    account[email]:
         label: Owner
     name:
         label: Name
@@ -51,9 +51,12 @@ columns:
     datecreated:
         label: 'Created At'
         type: datetime
+        invisible: true
     lastconn:
         label: 'Last Connection'
         type: timetense
+        invisible: true
     updated_at:
-        label: 'Last Import'
+        label: 'Updated At'
         type: timesince
+        invisible: true

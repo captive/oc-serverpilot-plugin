@@ -212,6 +212,12 @@ class ServerPilot extends Api
             return $this->request($this->endpoint, null, self::SP_HTTP_METHOD_DELETE);
     }
 
+    /**
+     * update()
+     * =======================================
+     * @param array     # Data to Update.
+     * @return json     # Api Response
+     */
     public function update($data)
     {
         if($this->id && !$this->endpoint)

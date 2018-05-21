@@ -51,6 +51,9 @@ permissions:
     awebsome.serverpilot.actions:
         tab: 'awebsome.serverpilot::lang.plugin.name'
         label: 'View actions log'
+    awebsome.serverpilot.accounts:
+        tab: 'awebsome.serverpilot::lang.plugin.name'
+        label: 'Manage Accounts'
     awebsome.serverpilot.servers:
         tab: 'awebsome.serverpilot::lang.plugin.name'
         label: 'View Servers'

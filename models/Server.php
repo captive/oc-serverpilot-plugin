@@ -1,12 +1,7 @@
 <?php namespace Awebsome\Serverpilot\Models;
 
-use Log;
-
 use Model;
-use Flash;
 use ValidationException;
-
-use Awebsome\Serverpilot\Classes\ServerPilot;
 
 /**
  * Server Model
@@ -52,4 +47,14 @@ class Server extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    use \Awebsome\ServerPilot\Traits\Servers;
+
+    public function beforeUpdate()
+    {
+        if(!$this->account->is_auth)
+            throw new ValidationException(['error_mesage' => trans('awebsome.serverpilot::lang.error.401')]);
+        else {
+            $this->apiPush();
+        }
+    }
 }

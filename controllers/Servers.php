@@ -2,8 +2,9 @@
 
 use Backend;
 use BackendMenu;
-
 use Backend\Classes\Controller;
+
+use Awebsome\ServerPilot\Models\Account;
 
 /**
  * Servers Back-end Controller
@@ -29,6 +30,15 @@ class Servers extends Controller
 
     public function index()
     {
+        /* $accounts = Account::all();
+
+        if($accounts)
+        {
+            foreach ($accounts as $account) {
+                $account->import();
+            }
+        } */
+
         $this->asExtension('ListController')->index();
     }
 }

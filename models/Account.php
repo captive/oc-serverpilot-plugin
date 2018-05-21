@@ -55,11 +55,13 @@ class Account extends Model
     {
         if(!$this->is_auth)
             throw new ValidationException(['error_mesage' => trans('awebsome.serverpilot::lang.error.401')]);
+        else {
+            $this->updated_at = time();
+        }
     }
 
     public function afterSave()
     {
-        // Import Batch
         $this->import();
     }
 }

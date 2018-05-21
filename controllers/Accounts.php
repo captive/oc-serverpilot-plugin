@@ -3,8 +3,6 @@
 use BackendMenu;
 use Backend\Classes\Controller;
 
-use Awebsome\Serverpilot\Models\Account;
-
 /**
  * Accounts Back-end Controller
  */
@@ -25,10 +23,5 @@ class Accounts extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Awebsome.Serverpilot', 'serverpilot', 'accounts');
-    }
-
-    public function test()
-    {
-        
     }
 }
